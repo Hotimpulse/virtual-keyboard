@@ -12,7 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  width: 1000px;
+  width: min(100% - 0rem, 1200px);
 }
 
 #input-field {
@@ -20,7 +20,7 @@ body {
   background-color: white;
   border-style: none;
   border-radius: 0.3rem;
-  width: 100%;
+  width: min(100% - 0rem, 800px);
   height: 150px;
   margin-bottom: 40px;
 }
@@ -30,34 +30,16 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 100%;
-  height: 400px;
+  width: 830px;
   background: rgb(202, 163, 163);
   border-radius: 0.6rem;
-}
-
-#row1 {
-  display: flex;
-  width: 1000px;
-  height: 100px;
-  background-color: wheat;
-}
-
-.key-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1000px;
-  height: 100%;
-  background-color: wheat;
 }
 
 #key-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: min(100% - 0rem, 3rem);
-  height: 1.5rem;
+  width: min(100% - 0rem, 1rem);
   margin: 5px;
   background-color: rgb(83, 83, 83);
   color: white;

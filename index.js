@@ -6,15 +6,15 @@ function createKeys() {
   const keysLowerCase = [
     ["§", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace"],
     ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "Enter"],
-    ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", `\n`],
-    ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"],
+    ["Capslock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "\\"],
+    ["LShift", "`", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "RShift"],
   ];
 
   const keysShiftCase = [
     ["±", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "Backspace"],
     ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "{", "}", "Enter"],
-    ["A", "S", "D", "F", "G", "H", "J", "K", "L", ":", `"`, "|"],
-    ["z", "x", "c", "v", "b", "n", "m", "<", ">", "?"],
+    ["Capslock", "A", "S", "D", "F", "G", "H", "J", "K", "L", ":", `"`, "|"],
+    ["LShift", "~", "z", "x", "c", "v", "b", "n", "m", "<", ">", "?", "RShift"],
   ];
 
   //container-wrapper
@@ -38,61 +38,56 @@ function createKeys() {
   container.appendChild(keyboard);
 
   //key rows
-  
-  const keyRow = document.createElement("div");
-  keyRow.setAttribute("id", "row1");
-  const row1 = keysLowerCase[0]; //14 strings []
+
+  const row1 = keysLowerCase[0];
   const row2 = keysLowerCase[1];
   const row3 = keysLowerCase[2];
   const row4 = keysLowerCase[3];
 
-  row1.forEach((el) => {
+  const allRows = [...row1, ...row2, ...row3, ...row4];
+
+//   console.log(allRows)
+
+  allRows.forEach((el) => {
     const keyBtn = document.createElement("div");
     keyBtn.setAttribute("id", "key-btn");
     keyboard.appendChild(keyBtn);
     keyBtn.innerHTML = el;
   })
+
+  document.addEventListener("keypress", (event) => {
+    console.log(event.key)
+        if (event.key === "Shift") allRows.innerHTML = keysShiftCase;
+        console.log(event.key);
+      KeyboardEvent.shiftKey ? keysShiftCase : keysLowerCase;
+  })
+
   
-  row2.forEach((el) => {
-    const keyBtn = document.createElement("div");
-    keyBtn.setAttribute("id", "key-btn");
-    keyboard.appendChild(keyBtn);
-    keyBtn.innerHTML = el;
-  })
 
-  row3.forEach((el) => {
-    const keyBtn = document.createElement("div");
-    keyBtn.setAttribute("id", "key-btn");
-    keyboard.appendChild(keyBtn);
-    keyBtn.innerHTML = el;
-  })
 
-  row4.forEach((el) => {
-    const keyBtn = document.createElement("div");
-    keyBtn.setAttribute("id", "key-btn");
-    keyboard.appendChild(keyBtn);
-    keyBtn.innerHTML = el;
-  })
+  //clicks and keypresses behaviour
 
-  keyboard.addEventListener("click", (event) => {
-    if(event.target.classList.contains("key-btn")) {
-        const key = event.target.dataset.key;
-        input.value += key;
-    }
-  });
+//   keyboard.addEventListener("click", (event) => {
+//     if(event.target.classList.contains("key-btn")) {
+//         const key = event.target.dataset.key;
+//         input.value += key;
+//     }
+//   });
+
+    
 
   //Event keys
 
 //   let lastTime = Date.now();
 
-  document.addEventListener("keypress", (event) => {
-    console.log(event.code); //ShiftLeft
-    console.log(event.key); //Shift
-    console.log(keyBtn);
-    if (keysLowerCase[0].includes(event.key)) keyBtn.classList.add("loader");
-    if (keysLowerCase[1].includes(event.key)) keyBtn.classList.add("loader");
-    if (keysLowerCase[2].includes(event.key)) keyBtn.classList.add("loader");
-    if (keysLowerCase[3].includes(event.key)) keyBtn.classList.add("loader");
+//   document.addEventListener("keypress", (event) => {
+//     console.log(event.code); //ShiftLeft
+//     console.log(event.key); //Shift
+//     console.log(keyBtn);
+//     if (keysLowerCase[0].includes(event.key)) keyBtn.classList.add("loader");
+//     if (keysLowerCase[1].includes(event.key)) keyBtn.classList.add("loader");
+//     if (keysLowerCase[2].includes(event.key)) keyBtn.classList.add("loader");
+//     if (keysLowerCase[3].includes(event.key)) keyBtn.classList.add("loader");
 
     // if (KeyboardEvent.shiftKey) {
     //     return keysLowerCase;
@@ -100,8 +95,7 @@ function createKeys() {
     //     return keysShiftCase;
     // }
 
-    KeyboardEvent.shiftKey ? keysShiftCase : keysLowerCase;
-  });
+    
     
     //uppercase
     // if (event.key === "Shift") {
