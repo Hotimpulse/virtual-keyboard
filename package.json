@@ -2,8 +2,9 @@
   "name": "virtual-keyboard",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
+    "style": "sass --watch ./sass/style.scss build/stylesheets/index.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

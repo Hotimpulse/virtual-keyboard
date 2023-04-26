@@ -1,0 +1,48 @@
+body {
+  background: grey;
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#input-field {
+  display: flex;
+  width: 100%;
+  height: 150px;
+}
+
+#virtual-keyboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 600px;
+  height: 200px;
+  background: rgb(202, 163, 163);
+}
+
+.key-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 600px;
+  height: 300px;
+  background-color: wheat;
+}
+
+.key-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  width: min(100% - 0rem, 3rem);
+  height: 3rem;
+  background-color: rgb(83, 83, 83);
+  color: white;
+  border-radius: 0.3em;
+}
+
+/*# sourceMappingURL=index.css.map */
