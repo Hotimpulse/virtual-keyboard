@@ -17,13 +17,17 @@ body {
 }
 
 #input-field {
-    display: flex;
+    position: relative;
+    top: 0;
+    resize: both; 
+    overflow: auto;
+
     background-color: white;
 
     border-style: none;
     border-radius: 0.3rem;
     width: min(100% - 0rem, 800px);
-    height: 150px;
+    height: 20vh;
 
     margin-bottom: 40px;
     

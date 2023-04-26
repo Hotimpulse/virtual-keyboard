@@ -7,7 +7,7 @@ function createKeys() {
     ["§", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace"],
     ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "Enter"],
     ["Capslock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "\\"],
-    ["LShift", "`", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "↑", "RShift"],
+    ["Shift", "`", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "↑", "Shift"],
     ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
@@ -15,7 +15,7 @@ function createKeys() {
     ["±", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "Backspace"],
     ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "{", "}", "Enter"],
     ["Capslock", "A", "S", "D", "F", "G", "H", "J", "K", "L", ":", `"`, "|"],
-    ["LShift", "~", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", "↑", "RShift"],
+    ["Shift", "~", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", "↑", "Shift"],
     ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
@@ -24,7 +24,7 @@ function createKeys() {
     ["§", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace"],
     ["Tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "Enter"],
     ["Capslock", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "ё"],
-    ["LShift", "]", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", "/", "↑", "RShift"],
+    ["Shift", "]", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", "/", "↑", "Shift"],
     ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
@@ -32,7 +32,7 @@ function createKeys() {
     ["±", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "Backspace"],
     ["Tab", "Й", "Ц", "У", "К", "Е", "Н", "Г", "Ш", "Щ", "З", "Х", "Ъ", "Enter"],
     ["Capslock", "Ф", "Ы", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", "Э", "Ё"],
-    ["LShift", "[", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю", "/", "↑", "RShift"],
+    ["Shift", "[", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю", "/", "↑", "Shift"],
     ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
@@ -47,11 +47,15 @@ function createKeys() {
 
   //input
 
-  const input = document.createElement("input");
+  const input = document.createElement("textarea");
   input.setAttribute("type", "text");
   input.setAttribute("id", "input-field");
   input.setAttribute("placeholder", "Type anything here...")
+  input.setAttribute("size", "1");
+
+
   container.appendChild(input);
+
 
   //keyboard
 
@@ -77,14 +81,6 @@ function createKeys() {
     keyboard.appendChild(keyBtn);
     keyBtn.innerHTML = el;
   })
-
-  // arrow-wrapper
-
-  const arrowWrapper = document.querySelectorAll("#virtual-keyboard :nth-child(n+62)");
-  console.log(arrowWrapper[0].innerHTML)
-//   arrowWrapper[0].style.display = "flex";
-//   arrowWrapper.style.width = "80px";
-
 
   //clicks and keypresses behaviour
 
@@ -119,43 +115,32 @@ function createKeys() {
 
     
 
-  //Event keys
+//Keyboard behavior - typingd
 
 //   let lastTime = Date.now();
 
-//   document.addEventListener("keypress", (event) => {
-//     console.log(event.code); //ShiftLeft
-//     console.log(event.key); //Shift
-//     console.log(keyBtn);
-//     if (keysLowerCase[0].includes(event.key)) keyBtn.classList.add("loader");
-//     if (keysLowerCase[1].includes(event.key)) keyBtn.classList.add("loader");
-//     if (keysLowerCase[2].includes(event.key)) keyBtn.classList.add("loader");
-//     if (keysLowerCase[3].includes(event.key)) keyBtn.classList.add("loader");
+  document.addEventListener("keydown", (event) => {
+    // console.log(event.code); //ShiftLeft
+    console.log(event.key); //Shift
+    let key = event.key;
+    if (!input.matches(":focus")) {
+        if (allRows.includes(event.key) && (event.key !== "Backspace" && 
+                                            event.key !== "Tab" &&
+                                            event.key !== "Capslock" &&
+                                            event.key !== "Shift" && 
+                                            event.key !== "Alt" &&
+                                            event.key !== "Enter")) {
+            input.value += key;
+        }else if(event.key === "Backspace") {
+            event.preventDefault();
+            input.value = input.value.slice(0, -1);
+        }else if(event.key === " ") {
+            input.value += " ";
+        }else if(event.key === "Enter") {
+            event.preventDefault();
+            input.value += "\n";
+        }
+    }
 
-    // if (KeyboardEvent.shiftKey) {
-    //     return keysLowerCase;
-    // }else{
-    //     return keysShiftCase;
-    // }
-
-    
-    
-    //uppercase
-    // if (event.key === "Shift") {
-    //     keyboard.style.display.none;
-    //     keysShiftCase.forEach((row) => {
-
-    //         keyRow.classList.add("key-row");
-    //         keyboard.appendChild(keyRow);
-        
-    //         row.forEach((key) => {
-              
-    //           keyBtn.classList.add("key-btn");
-    //           keyBtn.textContent = key;
-    //           keyBtn.dataset.key = key;
-    //           keyRow.appendChild(keyBtn);
-    //         });
-    //     });
-    // }
-
+  });
 }
