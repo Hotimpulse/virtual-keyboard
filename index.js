@@ -2,20 +2,41 @@ document.body.onload = createKeys;
 
 function createKeys() {
 
-  // keys
+  // keys English
   const keysLowerCase = [
     ["§", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace"],
     ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "Enter"],
     ["Capslock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "\\"],
-    ["LShift", "`", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "RShift"],
+    ["LShift", "`", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "↑", "RShift"],
+    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
-  const keysShiftCase = [
+  const keysUpperCase = [
     ["±", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "Backspace"],
     ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "{", "}", "Enter"],
     ["Capslock", "A", "S", "D", "F", "G", "H", "J", "K", "L", ":", `"`, "|"],
-    ["LShift", "~", "z", "x", "c", "v", "b", "n", "m", "<", ">", "?", "RShift"],
+    ["LShift", "~", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", "↑", "RShift"],
+    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
+
+  // keys Russian
+  const keysRuLowerCase = [
+    ["§", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace"],
+    ["Tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "Enter"],
+    ["Capslock", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "ё"],
+    ["LShift", "]", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", "/", "↑", "RShift"],
+    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
+  ];
+
+  const keysRuUpperCase = [
+    ["±", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "Backspace"],
+    ["Tab", "Й", "Ц", "У", "К", "Е", "Н", "Г", "Ш", "Щ", "З", "Х", "Ъ", "Enter"],
+    ["Capslock", "Ф", "Ы", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", "Э", "Ё"],
+    ["LShift", "[", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю", "/", "↑", "RShift"],
+    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
+  ];
+
+  const languages = ['en', 'ru'];
 
   //container-wrapper
 
@@ -29,6 +50,7 @@ function createKeys() {
   const input = document.createElement("input");
   input.setAttribute("type", "text");
   input.setAttribute("id", "input-field");
+  input.setAttribute("placeholder", "Type anything here...")
   container.appendChild(input);
 
   //keyboard
@@ -43,8 +65,9 @@ function createKeys() {
   const row2 = keysLowerCase[1];
   const row3 = keysLowerCase[2];
   const row4 = keysLowerCase[3];
+  const row5 = keysLowerCase[4];
 
-  const allRows = [...row1, ...row2, ...row3, ...row4];
+  const allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
 
 //   console.log(allRows)
 
@@ -55,24 +78,44 @@ function createKeys() {
     keyBtn.innerHTML = el;
   })
 
-  document.addEventListener("keypress", (event) => {
-    console.log(event.key)
-        if (event.key === "Shift") allRows.innerHTML = keysShiftCase;
-        console.log(event.key);
-      KeyboardEvent.shiftKey ? keysShiftCase : keysLowerCase;
-  })
+  // arrow-wrapper
 
-  
+  const arrowWrapper = document.querySelectorAll("#virtual-keyboard :nth-child(n+62)");
+  console.log(arrowWrapper[0].innerHTML)
+//   arrowWrapper[0].style.display = "flex";
+//   arrowWrapper.style.width = "80px";
 
 
   //clicks and keypresses behaviour
 
-//   keyboard.addEventListener("click", (event) => {
-//     if(event.target.classList.contains("key-btn")) {
-//         const key = event.target.dataset.key;
-//         input.value += key;
-//     }
-//   });
+  document.addEventListener("keydown", (event) => {
+    // console.log(event.key, event.code) s, KeyS
+
+    const isShiftPressed = event.shiftKey;
+    const isCtrlAltPressed = event.ctrlKey && event.altKey;
+    const key = event.key;
+
+    // if(isShiftPressed) {
+    //     if(keysLowerCase.includes(key)) {
+    //         event.preventDefault;
+    //         const uppercaseInd = keysLowerCase.indexOf(key);
+    //         const uppercaseKey = keysUpperCase[uppercaseInd];
+
+    //     }
+
+    // }
+
+    // if (isCtrlAltPressed) {
+    //     if (languages.includes(key)) {
+    //       // Change the language
+    //       console.log(`Switched to ${key} language`);
+    //     }
+    //   }
+    // if(event.target.innerHTML) {
+    //     const key = event.target.innerHTML;
+    //     input.value += key;
+    // }
+  });
 
     
 

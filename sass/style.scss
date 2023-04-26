@@ -2,11 +2,7 @@ body {
     background: grey;
     margin: 0 auto;
     box-sizing: border-box;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
-    // align-items: center;
-    padding: 15px;
+    padding: 5rem;
     outline: none;
 }
 
@@ -39,26 +35,45 @@ body {
     align-items: center;
     flex-wrap: wrap;
 
-    width: 830px;
-    // height: 400px;
+    width: 850px;
+    padding: 1rem;
     background: rgb(202, 163, 163);
     border-radius: 0.6rem;
+
+    & div:nth-child(14) {
+        background-color: black;
+        width: 3rem;
+    }
+    & div:nth-child(15) {
+        background-color: black;
+        width: 3rem;
+    }
+    & div:nth-child(28) {
+        background-color: black;
+    }
+    & div:nth-child(29) {
+        background-color: black;
+        width: 6.5rem;
+    }
+    & div:nth-child(42) {
+        background-color: black;
+        width: 3rem;
+    }
+    & div:nth-child(n+54) {
+        background-color: black;
+        width: 1rem;
+    }
+    & div:nth-child(55) {
+        width: 1rem;
+    }
+    & div:nth-child(60) {
+        width: 17.5rem;
+    }
+    & div:nth-child(n+62) {
+        width: 1rem;
+    }
 }
 
-// #row1 {
-//     display: flex;
-//     width: min(100% - 0rem, 800px);
-//     height: 100px;
-//     background-color: wheat;
-// }
-
-// .key-row {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     width: 100%;
-//     background-color: wheat;
-// }
 
 #key-btn {
     display: flex;
@@ -75,6 +90,8 @@ body {
 
     padding: 1rem;
 }
+
+// animation
 
 @keyframes colorSwitch {
     from {

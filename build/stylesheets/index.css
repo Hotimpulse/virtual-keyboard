@@ -2,7 +2,7 @@ body {
   background: grey;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 15px;
+  padding: 5rem;
   outline: none;
 }
 
@@ -30,9 +30,42 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 830px;
+  width: 850px;
+  padding: 1rem;
   background: rgb(202, 163, 163);
   border-radius: 0.6rem;
+}
+#virtual-keyboard div:nth-child(14) {
+  background-color: black;
+  width: 3rem;
+}
+#virtual-keyboard div:nth-child(15) {
+  background-color: black;
+  width: 3rem;
+}
+#virtual-keyboard div:nth-child(28) {
+  background-color: black;
+}
+#virtual-keyboard div:nth-child(29) {
+  background-color: black;
+  width: 6.5rem;
+}
+#virtual-keyboard div:nth-child(42) {
+  background-color: black;
+  width: 3rem;
+}
+#virtual-keyboard div:nth-child(n+54) {
+  background-color: black;
+  width: 1rem;
+}
+#virtual-keyboard div:nth-child(55) {
+  width: 1rem;
+}
+#virtual-keyboard div:nth-child(60) {
+  width: 17.5rem;
+}
+#virtual-keyboard div:nth-child(n+62) {
+  width: 1rem;
 }
 
 #key-btn {
