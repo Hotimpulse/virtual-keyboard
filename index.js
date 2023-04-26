@@ -36,7 +36,7 @@ function createKeys() {
     ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
-  const languages = ['en', 'ru'];
+  let language = "en";
 
   //container-wrapper
 
@@ -63,65 +63,55 @@ function createKeys() {
   keyboard.setAttribute("id", "virtual-keyboard");
   container.appendChild(keyboard);
 
-  //key rows
+//Keyboard behavior 
 
-  const row1 = keysLowerCase[0];
-  const row2 = keysLowerCase[1];
-  const row3 = keysLowerCase[2];
-  const row4 = keysLowerCase[3];
-  const row5 = keysLowerCase[4];
+//Shortcut combos behaviour => 
+// Ctrl+Alt to change language, Hold Shift to change keyboard to uppercase
+// Capslock to change keyboard to uppercase and Tab to add four spaces
+// console.log(keysLowerCase.toString())
 
-  const allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
+//key rows
+let row1 = keysLowerCase[0];
+let row2 = keysLowerCase[1];
+let row3 = keysLowerCase[2];
+let row4 = keysLowerCase[3];
+let row5 = keysLowerCase[4];
+let allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
 
-//   console.log(allRows)
+ function setLanguage(language) {
 
-  allRows.forEach((el) => {
-    const keyBtn = document.createElement("div");
-    keyBtn.setAttribute("id", "key-btn");
-    keyboard.appendChild(keyBtn);
-    keyBtn.innerHTML = el;
-  })
+    if (language === "en") {
+      keyboard.innerHTML = "";
+      allRows.forEach((el) => {
+        const keyBtn = document.createElement("div");
+        keyBtn.setAttribute("id", "key-btn");
+        keyboard.appendChild(keyBtn);
+        keyBtn.innerHTML = el;
+      }) 
+    } else if (language === "ru") {
+        keyboard.innerHTML = "";
+        let row1 = keysRuLowerCase[0];
+        let row2 = keysRuLowerCase[1];
+        let row3 = keysRuLowerCase[2];
+        let row4 = keysRuLowerCase[3];
+        let row5 = keysRuLowerCase[4];
 
-  //clicks and keypresses behaviour
+        allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
 
-  document.addEventListener("keydown", (event) => {
-    // console.log(event.key, event.code) s, KeyS
+        allRows.forEach((el) => {
+            const keyBtnRu = document.createElement("div");
+            keyBtnRu.setAttribute("id", "key-btn-ru");
+            keyboard.appendChild(keyBtnRu);
+            keyBtnRu.innerHTML = el;
+        })
+    }
+ }
 
-    const isShiftPressed = event.shiftKey;
-    const isCtrlAltPressed = event.ctrlKey && event.altKey;
-    const key = event.key;
+ setLanguage("en");
 
-    // if(isShiftPressed) {
-    //     if(keysLowerCase.includes(key)) {
-    //         event.preventDefault;
-    //         const uppercaseInd = keysLowerCase.indexOf(key);
-    //         const uppercaseKey = keysUpperCase[uppercaseInd];
+ // typing in English
 
-    //     }
-
-    // }
-
-    // if (isCtrlAltPressed) {
-    //     if (languages.includes(key)) {
-    //       // Change the language
-    //       console.log(`Switched to ${key} language`);
-    //     }
-    //   }
-    // if(event.target.innerHTML) {
-    //     const key = event.target.innerHTML;
-    //     input.value += key;
-    // }
-  });
-
-    
-
-//Keyboard behavior - typingd
-
-//   let lastTime = Date.now();
-
-  document.addEventListener("keydown", (event) => {
-    // console.log(event.code); //ShiftLeft
-    console.log(event.key); //Shift
+ document.addEventListener("keydown", (event) => {
     let key = event.key;
     if (!input.matches(":focus")) {
         if (allRows.includes(event.key) && (event.key !== "Backspace" && 
@@ -139,8 +129,30 @@ function createKeys() {
         }else if(event.key === "Enter") {
             event.preventDefault();
             input.value += "\n";
+        }else if(event.key === "Tab") {
+            event.preventDefault();
+            input.value += "    ";
         }
     }
 
   });
+
+// clicking
+
+  keyboard.addEventListener("click", (event) => {
+    console.log(event.key); //Shift
+  })
+
+
+  // changing languages
+
+  document.addEventListener("keydown", (event) => {
+    // console.log(event.key, event.code)
+
+    // const isShiftPressed = event.shiftKey;
+    const isCtrlAltPressed = event.ctrlKey && event.altKey; //language change
+    isCtrlAltPressed ? setLanguage("ru") : setLanguage("en");
+
+  });
+
 }

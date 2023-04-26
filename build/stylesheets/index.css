@@ -71,7 +71,7 @@ body {
   width: 1rem;
 }
 
-#key-btn {
+#key-btn, #key-btn-ru {
   display: flex;
   justify-content: center;
   align-items: center;
