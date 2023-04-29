@@ -36,8 +36,6 @@ function createKeys() {
     ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
   ];
 
-  let language = "en";
-
   //container-wrapper
 
   const container = document.createElement("div");
@@ -53,10 +51,8 @@ function createKeys() {
   input.setAttribute("placeholder", "Type anything here...")
   input.setAttribute("size", "1");
 
-
   container.appendChild(input);
-
-
+  
   //keyboard
 
   const keyboard = document.createElement("div");
@@ -65,71 +61,198 @@ function createKeys() {
 
 //Keyboard behavior 
 
-//Shortcut combos behaviour => 
-// Ctrl+Alt to change language, Hold Shift to change keyboard to uppercase
-// Capslock to change keyboard to uppercase and Tab to add four spaces
-// console.log(keysLowerCase.toString())
-
 //key rows
+
+//lowercase
+
 let row1 = keysLowerCase[0];
 let row2 = keysLowerCase[1];
 let row3 = keysLowerCase[2];
 let row4 = keysLowerCase[3];
 let row5 = keysLowerCase[4];
-let allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
 
- function setLanguage(language) {
+const allLowerRows = [...row1, ...row2, ...row3, ...row4, ...row5];
 
-    if (language === "en") {
-      keyboard.innerHTML = "";
-      allRows.forEach((el) => {
-        const keyBtn = document.createElement("div");
-        keyBtn.setAttribute("id", "key-btn");
-        keyboard.appendChild(keyBtn);
-        keyBtn.innerHTML = el;
-      }) 
-    } else if (language === "ru") {
+let ruRow1 = keysRuLowerCase[0];
+let ruRow2 = keysRuLowerCase[1];
+let ruRow3 = keysRuLowerCase[2];
+let ruRow4 = keysRuLowerCase[3];
+let ruRow5 = keysRuLowerCase[4];
+
+const allLowerRuRows = [...ruRow1, ...ruRow2, ...ruRow3, ...ruRow4, ...ruRow5];
+
+const allLower = [...allLowerRows, ...allLowerRuRows];
+
+// uppercase
+
+let rowUp1 = keysUpperCase[0];
+let rowUp2 = keysUpperCase[1];
+let rowUp3 = keysUpperCase[2];
+let rowUp4 = keysUpperCase[3];
+let rowUp5 = keysUpperCase[4];
+
+const allUpperRows = [...rowUp1, ...rowUp2, ...rowUp3, ...rowUp4, ...rowUp5];
+
+let rowUpRu1 = keysRuUpperCase[0];
+let rowUpRu2 = keysRuUpperCase[1];
+let rowUpRu3 = keysRuUpperCase[2];
+let rowUpRu4 = keysRuUpperCase[3];
+let rowUpRu5 = keysRuUpperCase[4];
+
+const allUpperRuRows = [...rowUpRu1, ...rowUpRu2, ...rowUpRu3, ...rowUpRu4, ...rowUpRu5];
+
+const allUpper = [...allUpperRows, ...allUpperRuRows];
+
+const allKeys = [...allLower, ...allUpper];
+
+
+function renderKeyboard(language, state) {
+    
+    if (language === "en" && state === "lowercase") {
         keyboard.innerHTML = "";
-        let row1 = keysRuLowerCase[0];
-        let row2 = keysRuLowerCase[1];
-        let row3 = keysRuLowerCase[2];
-        let row4 = keysRuLowerCase[3];
-        let row5 = keysRuLowerCase[4];
-
-        allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
-
-        allRows.forEach((el) => {
-            const keyBtnRu = document.createElement("div");
-            keyBtnRu.setAttribute("id", "key-btn-ru");
-            keyboard.appendChild(keyBtnRu);
-            keyBtnRu.innerHTML = el;
-        })
+        allLowerRows.forEach((el) => {
+            const keyBtn = document.createElement("div");
+            const key = el.toString();
+            keyBtn.setAttribute("id", "key-btn");
+            keyBtn.setAttribute("data-key", key);
+            keyboard.appendChild(keyBtn);
+            keyBtn.innerHTML = el;
+        });
     }
- }
+    if (language === "ru" && state === "lowercase") {
+        keyboard.innerHTML = "";
+        allLowerRuRows.forEach((el) => {
+            const keyRuBtn = document.createElement("div");
+            const key = el.toString();
+            keyRuBtn.setAttribute("id", "key-btn-ru");
+            keyRuBtn.setAttribute("data-key", key);
+            keyboard.appendChild(keyRuBtn);
+            keyRuBtn.innerHTML = el;
+        }); 
+    }
 
- setLanguage("en");
+    if (language === "en" && state === "uppercase") {
+        keyboard.innerHTML = "";
+        allUpperRows.forEach((el) => {
+            const keyBtn = document.createElement("div");
+            const key = el.toString();
+            keyBtn.setAttribute("id", "key-btn");
+            keyBtn.setAttribute("data-key", key);
+            keyboard.appendChild(keyBtn);
+            keyBtn.innerHTML = el;
+            });
+    }
 
- // typing in English
+    if (language === "ru" && state === "uppercase") {
+        keyboard.innerHTML = "";
+        allUpperRuRows.forEach((el) => {
+            const keyBtn = document.createElement("div");
+            const key = el.toString();
+            keyBtn.setAttribute("id", "key-btn");
+            keyBtn.setAttribute("data-key", key);
+            keyboard.appendChild(keyBtn);
+            keyBtn.innerHTML = el;
+            });
+    }
+
+}
+
+renderKeyboard("en", "lowercase");
+
+// change language 
+
+let currentLanguage = "en";
+let currentState = "lowercase";
+
+function toggleKeyboardLanguage() {
+    if (currentLanguage === "en") {
+      renderKeyboard("ru", "lowercase");
+      currentLanguage = "ru";
+    } else if (currentLanguage === "ru") {
+      renderKeyboard("en", "lowercase");
+      currentLanguage = "en";
+    }
+}
+
+
+function toggleKeyBoardCase() {
+    if (currentState === "lowercase" && currentLanguage === "ru") {
+        renderKeyboard("ru", "uppercase");
+        currentState === "uppercase";
+        currentLanguage === "ru";
+    }else if (currentState === "uppercase" && currentLanguage === "ru") {
+        renderKeyboard("ru", "lowercase");
+        currentState === "lowercase";
+        currentLanguage === "ru";
+    }else if (currentState === "lowercase" && currentLanguage === "en") {
+        renderKeyboard("en", "uppercase");
+        currentState === "uppercase";
+        currentLanguage === "en";
+    }else if (currentState === "uppercase" && currentLanguage === "en") {
+        renderKeyboard("en", "lowercase");
+        currentState === "lowercase";
+        currentLanguage === "en";
+    }
+}
+
+
+// let capsOn = false;
+// let shiftPressed = true;
+
+
+// shift + caps behavior 
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "CapsLock") {
+        toggleKeyBoardCase();
+    } else if (event.key === "Shift") {
+        toggleKeyBoardCase();
+    } else if (event.key === "Control") {
+        toggleKeyboardLanguage();
+        console.log()
+    }
+});
+
+ // typing behavior - lowercase, 2 languages
+
+// highlights
+ document.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+    const keyElement = keyboard.querySelector(`[data-key="${key}"]`);
+    if (keyElement) {
+        keyElement.classList.add('loader');
+    }
+ })
+ document.addEventListener("keyup", (event) => {
+    const key = event.key.toLowerCase();
+    const keyElement = keyboard.querySelector(`[data-key="${key}"]`);
+    if (keyElement) {
+        keyElement.classList.remove('loader');
+    }
+ })
 
  document.addEventListener("keydown", (event) => {
+
     let key = event.key;
+    console.log(event.key.toString())
+
     if (!input.matches(":focus")) {
-        if (allRows.includes(event.key) && (event.key !== "Backspace" && 
-                                            event.key !== "Tab" &&
-                                            event.key !== "Capslock" &&
-                                            event.key !== "Shift" && 
-                                            event.key !== "Alt" &&
-                                            event.key !== "Enter")) {
-            input.value += key;
-        }else if(event.key === "Backspace") {
+        if (allLower.includes(key) && (key !== "Backspace" && 
+                                            key !== "Tab" &&
+                                            key !== "CapsLock" &&
+                                            key !== "Shift" && 
+                                            key !== "Alt" &&
+                                            key !== "Enter")) {
+            input.value += key;                              
+        }else if(key === "Backspace") {
             event.preventDefault();
             input.value = input.value.slice(0, -1);
-        }else if(event.key === " ") {
+        }else if(key === " ") {
             input.value += " ";
-        }else if(event.key === "Enter") {
+        }else if(key === "Enter") {
             event.preventDefault();
             input.value += "\n";
-        }else if(event.key === "Tab") {
+        }else if(key === "Tab") {
             event.preventDefault();
             input.value += "    ";
         }
@@ -137,22 +260,15 @@ let allRows = [...row1, ...row2, ...row3, ...row4, ...row5];
 
   });
 
-// clicking
+//Shortcut combos behaviour => 
+// Ctrl+Alt to change language, Hold Shift to change keyboard to uppercase
+// Capslock to change keyboard to uppercase and Tab to add four spaces
 
-  keyboard.addEventListener("click", (event) => {
-    console.log(event.key); //Shift
-  })
+// clicking behavior
 
-
-  // changing languages
-
-  document.addEventListener("keydown", (event) => {
-    // console.log(event.key, event.code)
-
-    // const isShiftPressed = event.shiftKey;
-    const isCtrlAltPressed = event.ctrlKey && event.altKey; //language change
-    isCtrlAltPressed ? setLanguage("ru") : setLanguage("en");
-
-  });
+//   keyboard.addEventListener("click", (event) => {
+//     const key = event.key;
+//     console.log(event.code)
+//   })
 
 }
