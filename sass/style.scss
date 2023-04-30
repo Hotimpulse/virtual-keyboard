@@ -4,6 +4,8 @@ body {
     box-sizing: border-box;
     padding: 5rem;
     outline: none;
+    font-family: "Arial";
+    font-size: 0.9em;
 }
 
 #container {
@@ -39,45 +41,80 @@ body {
     align-items: center;
     flex-wrap: wrap;
 
-    width: 850px;
+    width: 880px;
     padding: 1rem;
-    background: rgb(202, 163, 163);
+    background: rgba(149, 162, 226, 0.797);
     border-radius: 0.6rem;
 
     & div:nth-child(14) {
         background-color: black;
         width: 3rem;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(15) {
         background-color: black;
         width: 3rem;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(28) {
         background-color: black;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(29) {
         background-color: black;
         width: 6.5rem;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(42) {
         background-color: black;
         width: 3rem;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(n+54) {
         background-color: black;
         width: 1rem;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(55) {
         width: 1rem;
     }
+    & div:nth-child(57) {
+        width: 1.2rem;
+    }
     & div:nth-child(60) {
         width: 17.5rem;
+        content: "";
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
     & div:nth-child(n+62) {
         width: 1rem;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(118, 249, 67);
+        }
     }
 }
-
 
 #key-btn, #key-btn-ru {
     display: flex;
@@ -85,14 +122,31 @@ body {
     align-items: center;
     
     width: min(100% - 0rem, 1rem);
-    // height: 1rem;
+    max-width: 100%;
     margin: 5px;
     
     background-color: rgb(83, 83, 83);
     color: white;
     border-radius: 0.3em;
-
+    border: 1px solid rgba(255, 0, 0, 0.425);
+    box-shadow: 11px rgba(0, 0, 0, 0.625);
     padding: 1rem;
+
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(118, 249, 67);
+    }
+}
+
+#manual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    width: 850px;
+    margin-top: 2rem;
+    font-size: 2rem;
 }
 
 // animation
@@ -111,3 +165,27 @@ body {
     animation-duration: 0.1s;
     animation-fill-mode: forwards;
 }
+
+.rgb {
+    border: 2px solid;
+    animation: strobe 0.5s infinite;
+}
+
+@keyframes strobe {
+    0% {
+      border-color: rgba(255, 0, 0, 0.517);
+    }
+    25% {
+      border-color: rgba(0, 128, 0, 0.597);
+    }
+    50% {
+      border-color: rgba(0, 0, 255, 0.548);
+    }
+    75% {
+      border-color: rgba(255, 0, 0, 0.869);
+    }
+    100% {
+      border-color: rgba(66, 128, 0, 0.455);
+    }
+  }
+

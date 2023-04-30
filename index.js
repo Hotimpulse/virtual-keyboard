@@ -8,7 +8,7 @@ function createKeys() {
     ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "Enter"],
     ["Capslock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "\\"],
     ["Shift", "`", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "↑", "Shift"],
-    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
+    ["fn", "Control", "Alt", "Meta", "Space", "Meta", "Alt", "←", "↓", "→"]
   ];
 
   const keysUpperCase = [
@@ -16,7 +16,7 @@ function createKeys() {
     ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "{", "}", "Enter"],
     ["Capslock", "A", "S", "D", "F", "G", "H", "J", "K", "L", ":", `"`, "|"],
     ["Shift", "~", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", "↑", "Shift"],
-    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
+    ["fn", "Control", "Alt", "Meta", "Space", "Meta", "Alt", "←", "↓", "→"]
   ];
 
   // keys Russian
@@ -25,7 +25,7 @@ function createKeys() {
     ["Tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "Enter"],
     ["Capslock", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "ё"],
     ["Shift", "]", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", "/", "↑", "Shift"],
-    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
+    ["fn", "Control", "Alt", "Meta", "Space", "Meta", "Alt", "←", "↓", "→"]
   ];
 
   const keysRuUpperCase = [
@@ -33,7 +33,7 @@ function createKeys() {
     ["Tab", "Й", "Ц", "У", "К", "Е", "Н", "Г", "Ш", "Щ", "З", "Х", "Ъ", "Enter"],
     ["Capslock", "Ф", "Ы", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", "Э", "Ё"],
     ["Shift", "[", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю", "/", "↑", "Shift"],
-    ["fn", "Ctrl", "Alt", "Cmd", "Space", "Cmd", "Alt", "←", "↓", "→"]
+    ["fn", "Control", "Alt", "Meta", "Space", "Meta", "Alt", "←", "↓", "→"]
   ];
 
   //container-wrapper
@@ -61,9 +61,7 @@ function createKeys() {
 
 //Keyboard behavior 
 
-//key rows
-
-//lowercase
+//key rows, lowercase
 
 let row1 = keysLowerCase[0];
 let row2 = keysLowerCase[1];
@@ -83,7 +81,7 @@ const allLowerRuRows = [...ruRow1, ...ruRow2, ...ruRow3, ...ruRow4, ...ruRow5];
 
 const allLower = [...allLowerRows, ...allLowerRuRows];
 
-// uppercase
+//key rows, uppercase
 
 let rowUp1 = keysUpperCase[0];
 let rowUp2 = keysUpperCase[1];
@@ -104,6 +102,7 @@ const allUpperRuRows = [...rowUpRu1, ...rowUpRu2, ...rowUpRu3, ...rowUpRu4, ...r
 const allUpper = [...allUpperRows, ...allUpperRuRows];
 
 const allKeys = [...allLower, ...allUpper];
+
 
 
 function renderKeyboard(language, state) {
@@ -157,8 +156,6 @@ function renderKeyboard(language, state) {
 
 }
 
-renderKeyboard("en", "lowercase");
-
 // change language 
 
 let currentLanguage = "en";
@@ -167,13 +164,16 @@ let currentState = "lowercase";
 function toggleKeyboardLanguage() {
     if (currentLanguage === "en") {
       renderKeyboard("ru", "lowercase");
+      language = "ru"; //localStorage variable
+      localStorage.setItem("language", language);  
       currentLanguage = "ru";
     } else if (currentLanguage === "ru") {
       renderKeyboard("en", "lowercase");
+      language = "en"; //localStorage variable
+      localStorage.setItem("language", language); 
       currentLanguage = "en";
     }
 }
-
 
 function toggleKeyBoardCase() {
     if (currentState === "lowercase" && currentLanguage === "ru") {
@@ -195,46 +195,91 @@ function toggleKeyBoardCase() {
     }
 }
 
+let language = localStorage.getItem("language");
+let state = localStorage.getItem("state");
+function generateKeyboard() {
+    
+    if (!language) {
+        language = "en";
+        localStorage.setItem("language", language);
+        // renderKeyboard(`${localStorage.getItem(language)}`, state); 
+    } 
+    
+    if (!state) {
+        state = "lowercase";
+        localStorage.setItem("state", state);
+    }
+    
+    if (localStorage.getItem("language")) {
+        renderKeyboard(language, state);
+    }
+    // console.log(localStorage.getItem("language"))
+}
 
-// let capsOn = false;
-// let shiftPressed = true;
-
+generateKeyboard(); //generates keyboard via renderKeyboard() and saves the state to local storage
 
 // shift + caps behavior 
+let capsOn = false;
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "CapsLock") {
         toggleKeyBoardCase();
+        capsOn = true;
     } else if (event.key === "Shift") {
         toggleKeyBoardCase();
     } else if (event.key === "Control") {
         toggleKeyboardLanguage();
-        console.log()
     }
 });
 
- // typing behavior - lowercase, 2 languages
+document.addEventListener("mousedown", (event) => {
+    let key = event.target.innerHTML;
+    if (key === "Capslock") {
+        toggleKeyBoardCase();
+        capsOn = true;
+    } else if (key === "Shift") {
+        toggleKeyBoardCase();
+    } else if (key === "Control") {
+        toggleKeyboardLanguage();
+    }
+});
+
+document.addEventListener("keyup", (event) => {
+    if (event.key === "Shift" && currentLanguage === "ru") {
+        renderKeyboard("ru", "lowercase");
+    }else if (event.key === "Shift" && currentLanguage === "en"){
+        renderKeyboard("en", "lowercase");
+    }else if (event.key === "CapsLock" && capsOn === true && currentLanguage === "en") {
+        renderKeyboard("en", "lowercase");
+    }else if (event.key === "CapsLock" && capsOn === true && currentLanguage === "ru") {
+        renderKeyboard("ru", "lowercase");
+    }
+});
 
 // highlights
  document.addEventListener("keydown", (event) => {
-    const key = event.key.toLowerCase();
+    const key = event.key;
     const keyElement = keyboard.querySelector(`[data-key="${key}"]`);
     if (keyElement) {
         keyElement.classList.add('loader');
+        // keyElement.classList.toggle('rgb');
     }
  })
  document.addEventListener("keyup", (event) => {
-    const key = event.key.toLowerCase();
+    const key = event.key;
     const keyElement = keyboard.querySelector(`[data-key="${key}"]`);
     if (keyElement) {
         keyElement.classList.remove('loader');
+        // keyElement.classList.toggle('rgb');
     }
  })
+
+ // typing behavior - lowercase and uppercase, 2 languages
 
  document.addEventListener("keydown", (event) => {
 
     let key = event.key;
-    console.log(event.key.toString())
+    console.log(event.key)
 
     if (!input.matches(":focus")) {
         if (allLower.includes(key) && (key !== "Backspace" && 
@@ -242,12 +287,24 @@ document.addEventListener("keydown", (event) => {
                                             key !== "CapsLock" &&
                                             key !== "Shift" && 
                                             key !== "Alt" &&
+                                            key !== "Control" &&
+                                            key !== "Meta" &&
                                             key !== "Enter")) {
-            input.value += key;                              
+            input.value += key;
+        }else if (allUpper.includes(key) && (key !== "Backspace" && 
+                                            key !== "Tab" &&
+                                            key !== "CapsLock" &&
+                                            key !== "Shift" && 
+                                            key !== "Alt" &&
+                                            key !== "Control" &&
+                                            key !== "Meta" &&
+                                            key !== "Enter")) {
+            input.value += key.toUpperCase();
         }else if(key === "Backspace") {
             event.preventDefault();
             input.value = input.value.slice(0, -1);
         }else if(key === " ") {
+            event.preventDefault();
             input.value += " ";
         }else if(key === "Enter") {
             event.preventDefault();
@@ -260,15 +317,44 @@ document.addEventListener("keydown", (event) => {
 
   });
 
-//Shortcut combos behaviour => 
-// Ctrl+Alt to change language, Hold Shift to change keyboard to uppercase
-// Capslock to change keyboard to uppercase and Tab to add four spaces
-
 // clicking behavior
 
-//   keyboard.addEventListener("click", (event) => {
-//     const key = event.key;
-//     console.log(event.code)
-//   })
+keyboard.addEventListener("mousedown", (event) => {
+    let key = event.target.innerHTML;
+    console.log(key)
+    if (allKeys.includes(key) && (key !== "Backspace" && 
+                                key !== "Tab" &&
+                                key !== "Capslock" &&
+                                key !== "Shift" && 
+                                key !== "Alt" &&
+                                key !== "Control" &&
+                                key !== "Space" &&
+                                key !== "Meta" &&
+                                key !== "Enter")) {
+        input.value += event.target.innerHTML;
+    }else if(key === "Backspace") {
+        event.preventDefault();
+        input.value = input.value.slice(0, -1);
+    }else if (key === "Space") {
+        input.value += " ";
+    }else if (key === "Enter") {
+        event.preventDefault();
+        input.value += "\n";
+    }else if (key === "Tab") {
+        event.preventDefault();
+        input.value += "    ";
+    }
+})
+
+//user instructions
+
+const manual = document.createElement("div");
+manual.setAttribute("id", "manual");
+manual.innerText = `The keyboard was created on a Mac by a Windows user. I'm so sorry.
+                    One question remains... Does it RGB?
+                    To change the language, use Ctrl + Space.
+                    Backspace = del key.`;
+
+container.appendChild(manual);                    
 
 }
