@@ -79,9 +79,6 @@ let ruRow5 = keysRuLowerCase[4];
 
 const allLowerRuRows = [...ruRow1, ...ruRow2, ...ruRow3, ...ruRow4, ...ruRow5];
 
-const allLower = [...allLowerRows];
-const allRuLower = [...allLowerRuRows];
-
 //key rows, uppercase
 
 let rowUp1 = keysUpperCase[0];
@@ -100,14 +97,17 @@ let rowUpRu5 = keysRuUpperCase[4];
 
 const allUpperRuRows = [...rowUpRu1, ...rowUpRu2, ...rowUpRu3, ...rowUpRu4, ...rowUpRu5];
 
-const allUpper = [...allUpperRows];
-const allRuUpper = [...allUpperRuRows];
+let allKeys = [...row1, ...row2, ...row3, ...row4, ...row5, 
+                ...rowUp1, ...rowUp2, ...rowUp3, ...rowUp4, ...rowUp5];
 
-const allKeys = [...allLower, ...allRuLower, ...allUpper, ...allRuUpper];
+let allRuKeys = [...ruRow1, ...ruRow2, ...ruRow3, ...ruRow4, ...ruRow5, 
+                ...rowUpRu1, ...rowUpRu2, ...rowUpRu3, ...rowUpRu4, ...rowUpRu5];
+
+let ultimateKeys = [...allKeys, ...allRuKeys];
 
 function renderKeyboard(language, state) {
     
-    if (language === "en" && state === "lowercase") {
+    if ((language === "en") && (state === "lowercase")) {
         keyboard.innerHTML = "";
         allLowerRows.forEach((el) => {
             const keyBtn = document.createElement("div");
@@ -119,8 +119,7 @@ function renderKeyboard(language, state) {
             if(keyBtn.innerHTML === "Control") keyBtn.innerText = "Ctrl";
             if(keyBtn.innerHTML === "Meta") keyBtn.innerText = "Cmd";
         });
-    }
-    if (language === "ru" && state === "lowercase") {
+    }else if ((language === "ru") && (state === "lowercase")) {
         keyboard.innerHTML = "";
         allLowerRuRows.forEach((el) => {
             const keyBtn = document.createElement("div");
@@ -132,9 +131,7 @@ function renderKeyboard(language, state) {
             if(keyBtn.innerHTML === "Control") keyBtn.innerText = "Ctrl";
             if(keyBtn.innerHTML === "Meta") keyBtn.innerText = "Cmd";
         }); 
-    }
-
-    if (language === "en" && state === "uppercase") {
+    } else if ((language === "en") && (state === "uppercase")) {
         keyboard.innerHTML = "";
         allUpperRows.forEach((el) => {
             const keyBtn = document.createElement("div");
@@ -146,9 +143,7 @@ function renderKeyboard(language, state) {
             if(keyBtn.innerHTML === "Control") keyBtn.innerText = "Ctrl";
             if(keyBtn.innerHTML === "Meta") keyBtn.innerText = "Cmd";
             });
-    }
-
-    if (language === "ru" && state === "uppercase") {
+    } else if ((language === "ru") && (state === "uppercase")) {
         keyboard.innerHTML = "";
         allUpperRuRows.forEach((el) => {
             const keyBtn = document.createElement("div");
@@ -166,24 +161,38 @@ function renderKeyboard(language, state) {
 
 // change language 
 
-let currentLanguage = "en";
+// let currentLanguage = "en";
 let language = localStorage.getItem("language");
 let state = localStorage.getItem("state");
 
 function generateKeyboard() {
 
-    if (!language) {
-        language = "en";
-        localStorage.setItem("language", language);
-    } 
-    
     if (!state) {
         state = "lowercase";
         localStorage.setItem("state", state);
     }
+
+    if (!language) {
+        language = "en";
+        localStorage.setItem("language", language);
+    }
+
+    renderKeyboard(language, state);
     
-    if (localStorage.getItem("language")) {
+    if (localStorage.getItem("language", language) === "ru") {
         renderKeyboard(language, state);
+        language === "ru";
+        state = "lowercase";
+        localStorage.setItem("language", language);
+        localStorage.setItem("state", state);
+    }
+    
+    if (localStorage.getItem("language", language) === "en") {
+        renderKeyboard(language, state);
+        language === "en";
+        state = "lowercase";
+        localStorage.setItem("language", language);
+        localStorage.setItem("state", state);
     }
 }
 
@@ -191,16 +200,14 @@ generateKeyboard(); //generates keyboard via renderKeyboard() and saves the stat
 
 function toggleKeyboardLanguage() {
 
-    if (currentLanguage === "en") {
-      renderKeyboard("ru", "lowercase");
-      language = "ru"; //localStorage variable
-      localStorage.setItem("language", language);  
-      currentLanguage = "ru";
-    } else if (currentLanguage === "ru") {
-      renderKeyboard("en", "lowercase");
-      language = "en"; //localStorage variable
-      localStorage.setItem("language", language); 
-      currentLanguage = "en";
+    if (localStorage.getItem("language") === "en") {
+        language = "ru"; //localStorage variable
+        generateKeyboard();
+        localStorage.setItem("language", language);  
+    } else if (localStorage.getItem("language") === "ru") {
+        language = "en"; //localStorage variable
+        generateKeyboard();
+        localStorage.setItem("language", language); 
     }
 }
 
@@ -273,11 +280,28 @@ document.addEventListener("keyup", (event) => {
 
 // highlights
  document.addEventListener("keydown", (event) => {
-    const key = event.key;
-    const keyElement = keyboard.querySelector(`[data-key="${key}"]`);
+    const engkey = event.key;
+    const pseudoRus = convertToRussian(engkey);
+    const pseudoEng = convertRussianToEnglish(engkey);
+    const keyElement = keyboard.querySelector(`[data-key="${engkey}"]`);
+    const fakeEngElement = keyboard.querySelector(`[data-key="${pseudoRus}"]`);
+    const fakeRuElement = keyboard.querySelector(`[data-key="${pseudoEng}"]`);
+    const ruKeyElement = keyboard.querySelector(`[data-key="${convertToRussian(engkey)}"]`);
     if (keyElement) {
         keyElement.classList.add("loader");
         keyElement.classList.toggle("rgb");
+    }
+    if (ruKeyElement) {
+        ruKeyElement.classList.add("loader");
+        ruKeyElement.classList.toggle("rgb");
+    }
+    if (fakeEngElement) {
+        fakeEngElement.classList.add("loader");
+        fakeEngElement.classList.toggle("rgb");
+    }
+    if (fakeRuElement) {
+        fakeRuElement.classList.add("loader");
+        fakeRuElement.classList.toggle("rgb");
     }
  })
  document.addEventListener("keyup", (event) => {
@@ -290,83 +314,166 @@ document.addEventListener("keyup", (event) => {
  })
 
  // typing behavior - lowercase and uppercase, 2 languages
+ const englishToRussianMap = {
+    'a': 'ф',
+    'b': 'и',
+    'c': 'с',
+    'd': 'в',
+    'e': 'у',
+    'f': 'а',
+    'g': 'п',
+    'h': 'р',
+    'i': 'ш',
+    'j': 'о',
+    'k': 'л',
+    'l': 'д',
+    'm': 'ь',
+    'n': 'т',
+    'o': 'щ',
+    'p': 'з',
+    'q': 'й',
+    'r': 'к',
+    's': 'ы',
+    't': 'е',
+    'u': 'г',
+    'v': 'м',
+    'w': 'ц',
+    'x': 'ч',
+    'y': 'н',
+    'z': 'я',
+    '[': 'х',
+    ']': 'ъ',
+    ';': 'ж',
+    "'": 'э',
+    ',': 'б',
+    '.': 'ю',
+    '`': 'ё',
+    '/': '.',
+    '\\': '\\',
+    "A": "Ф",
+    "B": "И",
+    "C": "С",
+    "D": "В",
+    "E": "У",
+    "F": "А",
+    "G": "П",
+    "H": "Р",
+    "I": "Ш",
+    "J": "О",
+    "K": "Л",
+    "L": "Д",
+    "M": "Ь",
+    "N": "Т",
+    "O": "Щ",
+    "P": "З",
+    "Q": "Й",
+    "R": "К",
+    "S": "Ы",
+    "T": "Е",
+    "U": "Г",
+    "V": "М",
+    "W": "Ц",
+    "X": "Ч",
+    "Y": "Н",
+    "Z": "Я",
+    '{': 'Х',
+    '}': 'Ъ',
+    ':': 'Ж',
+    "\"": 'Э',
+    '<': 'Б',
+    '>': 'Ю',
+    '|': 'Ё',
+    '?': '?',
+    '~': ']',
+  };
 
+// 
+function convertToRussian(str) {
+    return str
+        .split('')
+        .map(char => englishToRussianMap[char] || char)
+        .join('');
+}
+
+function convertRussianToEnglish(str) {
+    const russianToEnglish = {
+      'й': 'q', 'ц': 'w', 'у': 'e', 'к': 'r', 'е': 't', 'н': 'y', 'г': 'u', 'ш': 'i', 'щ': 'o', 'з': 'p',
+      'х': '[', 'ъ': ']', 'ф': 'a', 'ы': 's', 'в': 'd', 'а': 'f', 'п': 'g', 'р': 'h', 'о': 'j', 'л': 'k',
+      'д': 'l', 'ж': ';', 'э': '\'', 'я': 'z', 'ч': 'x', 'с': 'c', 'м': 'v', 'и': 'b', 'т': 'n', 'ь': 'm',
+      'б': ',', 'ю': '.', '.': '/', 'ё': '`',
+      'Й': 'Q', 'Ц': 'W', 'У': 'E', 'К': 'R', 'Е': 'T', 'Н': 'Y', 'Г': 'U', 'Ш': 'I', 'Щ': 'O', 'З': 'P',
+      'Х': '{', 'Ъ': '}', 'Ф': 'A', 'Ы': 'S', 'В': 'D', 'А': 'F', 'П': 'G', 'Р': 'H', 'О': 'J', 'Л': 'K',
+      'Д': 'L', 'Ж': ':', 'Э': '"', 'Я': 'Z', 'Ч': 'X', 'С': 'C', 'М': 'V', 'И': 'B', 'Т': 'N', 'Ь': 'M',
+      'Б': '<', 'Ю': '>', ',': '?', 'Ё': '~'
+    };
+  
+    return str.split('').map(char => russianToEnglish[char] || char).join('');
+  }
+  
  document.addEventListener("keydown", (event) => {
-
+    
     let key = event.key;
     // english letters
-    if (!input.matches(":focus") && localStorage.getItem("language") === "en") {
-        if (allLower.includes(key) && (key !== "Backspace" && 
-                                            key !== "Tab" &&
-                                            key !== "CapsLock" &&
-                                            key !== "Shift" && 
-                                            key !== "Alt" &&
-                                            key !== "Control" &&
-                                            key !== "Meta" &&
-                                            key !== "Enter")) {
-            input.value += key;
-        }else if (allUpper.includes(key) && (key !== "Backspace" && 
-                                            key !== "Tab" &&
-                                            key !== "CapsLock" &&
-                                            key !== "Shift" && 
-                                            key !== "Alt" &&
-                                            key !== "Control" &&
-                                            key !== "Meta" &&
-                                            key !== "Enter")) {
-            input.value += key.toUpperCase();
-        }else if(key === "Backspace") {
-            event.preventDefault();
-            input.value = input.value.slice(0, -1);
-        }else if(key === " ") {
-            event.preventDefault();
-            input.value += " ";
-        }else if(key === "Enter") {
-            event.preventDefault();
-            input.value += "\n";
-        }else if(key === "Tab") {
-            event.preventDefault();
-            input.value += "    ";
+    if (ultimateKeys.includes(key)) {
+        
+        if (!input.matches(":focus") && localStorage.getItem("language") === "en") {
+            if (allKeys.includes(convertRussianToEnglish(key)) && (key !== "Backspace" && 
+                                                key !== "Tab" &&
+                                                key !== "CapsLock" &&
+                                                key !== "Shift" && 
+                                                key !== "Alt" &&
+                                                key !== "Control" &&
+                                                key !== "Meta" &&
+                                                key !== "Enter")) {
+                // input.value += key;
+                input.value += convertRussianToEnglish(key);
+            } else if (key === "Backspace") {
+                    event.preventDefault();
+                    input.value = input.value.slice(0, -1);
+                }else if(key === " ") {
+                    event.preventDefault();
+                    input.value += " ";
+                }else if(key === "Enter") {
+                    event.preventDefault();
+                    input.value += "\n";
+                }else if(key === "Tab") {
+                    event.preventDefault();
+                    input.value += "    ";
+                }
+        }
+        
+        if (!input.matches(":focus") && localStorage.getItem("language") === "ru") {
+            if (allRuKeys.includes(convertToRussian(key)) && (key !== "Backspace" && 
+                                        key !== "Tab" &&
+                                        key !== "CapsLock" &&
+                                        key !== "Shift" && 
+                                        key !== "Alt" &&
+                                        key !== "Control" &&
+                                        key !== "Meta" &&
+                                        key !== "Enter")) {
+                input.value += convertToRussian(key);
+            } else if (key === "Backspace") {
+                event.preventDefault();
+                input.value = input.value.slice(0, -1);
+            }else if(key === " ") {
+                event.preventDefault();
+                input.value += " ";
+            }else if(key === "Enter") {
+                event.preventDefault();
+                input.value += "\n";
+            }else if(key === "Tab") {
+                event.preventDefault();
+                input.value += "    ";
+            }
         }
     }
-    // russian letters
-    if (!input.matches(":focus") && localStorage.getItem("language") === "ru") {
-        if (allRuLower.includes(key) && (key !== "Backspace" && 
-                                            key !== "Tab" &&
-                                            key !== "CapsLock" &&
-                                            key !== "Shift" && 
-                                            key !== "Alt" &&
-                                            key !== "Control" &&
-                                            key !== "Meta" &&
-                                            key !== "Enter")) {
-            input.value += key;
-        }else if (allRuUpper.includes(key) && (key !== "Backspace" && 
-                                            key !== "Tab" &&
-                                            key !== "CapsLock" &&
-                                            key !== "Shift" && 
-                                            key !== "Alt" &&
-                                            key !== "Control" &&
-                                            key !== "Meta" &&
-                                            key !== "Enter")) {
-            input.value += key.toUpperCase();
-        }else if(key === "Backspace") {
-            event.preventDefault();
-            input.value = input.value.slice(0, -1);
-        }else if(key === " ") {
-            event.preventDefault();
-            input.value += " ";
-        }else if(key === "Enter") {
-            event.preventDefault();
-            input.value += "\n";
-        }else if(key === "Tab") {
-            event.preventDefault();
-            input.value += "    ";
-        }
-    }
-  });
+        
+});
 
 // clicking behavior
 
 keyboard.addEventListener("mousedown", (event) => {
+    event.preventDefault();
     let key = event.target.innerHTML;
 
     if (allKeys.includes(key) && (key !== "Backspace" && 
@@ -396,13 +503,16 @@ keyboard.addEventListener("mousedown", (event) => {
 
 document.addEventListener("mousedown", (event) => {
     let key = event.target.innerHTML;
-    if (key === "Capslock") {
+    if (key === "Capslock" && capsOn === false) {
         toggleKeyBoardCase();
         capsOn = true;
     } else if (key === "Shift") {
         toggleKeyBoardCase();
     } else if (key === "Control") {
         toggleKeyboardLanguage();
+    } else if (key === "Capslock" && capsOn === true) {
+        toggleKeyBoardCase();
+        capsOn = false;
     }
 });
 
@@ -412,10 +522,9 @@ const manual = document.createElement("div");
 manual.setAttribute("id", "manual");
 manual.innerText = `The keyboard was created on a Mac by a Windows user.
                     To change the language, use Ctrl + Alt. 
-                    (OS language has to be set accordingly);
                     Backspace = del key.`;
 
 container.appendChild(manual);                    
-// alert(`The keyboard was created on a Mac by a Windows user. (I'm so sorry.)
-// One question remains... Does it RGB?`);
+alert(`The keyboard was created on a Mac by a Windows user. (I'm so sorry.)
+One question remains... Does it RGB?`);
 }

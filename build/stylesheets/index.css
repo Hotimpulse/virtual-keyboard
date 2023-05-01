@@ -116,7 +116,7 @@ body {
   width: min(100% - 0rem, 1rem);
   max-width: 100%;
   margin: 5px;
-  background-color: rgba(72, 105, 106, 0.344);
+  background-color: rgb(83, 83, 83);
   color: white;
   border-radius: 0.3em;
   border: 1px solid rgba(255, 0, 0, 0.425);
