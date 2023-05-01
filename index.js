@@ -305,11 +305,24 @@ document.addEventListener("keyup", (event) => {
     }
  })
  document.addEventListener("keyup", (event) => {
-    const key = event.key;
-    const keyElement = keyboard.querySelector(`[data-key="${key}"]`);
+    const engkey = event.key;
+    const pseudoRus = convertToRussian(engkey);
+    const pseudoEng = convertRussianToEnglish(engkey);
+    const keyElement = keyboard.querySelector(`[data-key="${engkey}"]`);
+    const fakeEngElement = keyboard.querySelector(`[data-key="${pseudoRus}"]`);
+    const fakeRuElement = keyboard.querySelector(`[data-key="${pseudoEng}"]`);
+    const ruKeyElement = keyboard.querySelector(`[data-key="${convertToRussian(engkey)}"]`);
     if (keyElement) {
         keyElement.classList.remove('loader');
-        // keyElement.classList.toggle('rgb');
+    }
+    if (ruKeyElement) {
+        ruKeyElement.classList.remove('loader');
+    }
+    if (fakeEngElement) {
+        fakeEngElement.classList.remove('loader');
+    }
+    if (fakeRuElement) {
+        fakeRuElement.classList.remove('loader');
     }
  })
 
